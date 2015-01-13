@@ -1,6 +1,7 @@
 package io.pivotal.sensor;
 
 import io.pivotal.sensor.messaging.RFIDReceiver;
+import io.pivotal.sensor.messaging.TiltSwitchReceiver;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -22,43 +23,78 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 public class RfidMicroServiceApplication {
 
-final static String queueName = "arduino-rfid-event-queue";
-	
+	final static String queueNameRFID = "arduino-rfid-event-queue";
+	final static String queueNameTilt = "arduino-tilt-event-queue";
+
 	@Autowired
 	RabbitTemplate rabbitTemplate; 
 	
 	@Bean
-	Queue queue() {
-		return new Queue(queueName, true);
-	}
-
-	@Bean
-	TopicExchange exchange() {
-		return new TopicExchange("arduino-rfid-exchange");
-	}
-
-	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(queueName);
+	Queue queueRFID() {
+		return new Queue(queueNameRFID, true);
 	}
 	
 	@Bean
-	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+	Queue queueTilt() {
+		return new Queue(queueNameTilt, true);
+	}
+
+	@Bean
+	TopicExchange exchangeRFID() {
+		return new TopicExchange("arduino-rfid-exchange");
+	}
+	
+	@Bean
+	TopicExchange exchangeTilt() {
+		return new TopicExchange("arduino-tilt-exchange");
+	}
+
+	@Bean
+	Binding bindingRFID(Queue queueRFID, TopicExchange exchangeRFID) {
+		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with(queueNameRFID);
+	}
+	
+	@Bean
+	Binding bindingTilt(Queue queueTilt, TopicExchange exchangeTilt) {
+		return BindingBuilder.bind(queueTilt).to(exchangeTilt).with(queueNameTilt);
+	}
+	
+	@Bean
+	SimpleMessageListenerContainer containerRFID(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapterRFID) {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames(queueName);
-		container.setMessageListener(listenerAdapter);
+		container.setQueueNames(queueNameRFID);
+		container.setMessageListener(listenerAdapterRFID);
 		return container;
 	}
 	
 	@Bean
-	RFIDReceiver receiver() {
+	SimpleMessageListenerContainer containerTilt(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapterTilt) {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.setQueueNames(queueNameTilt);
+		container.setMessageListener(listenerAdapterTilt);
+		return container;
+	}
+	
+	@Bean
+	RFIDReceiver receiverRFID() {
         return new RFIDReceiver();
+    }
+	
+	@Bean
+	TiltSwitchReceiver receiverTilt() {
+        return new TiltSwitchReceiver();
     }
 
 	@Bean
-	MessageListenerAdapter listenerAdapter(RFIDReceiver receiver) {
-		return new MessageListenerAdapter(receiver, "receiveMessage");
+	MessageListenerAdapter listenerAdapterRFID(RFIDReceiver receiverRFID) {
+		return new MessageListenerAdapter(receiverRFID, "receiveMessage");
+	}
+	
+	@Bean
+	MessageListenerAdapter listenerAdapterTilt(TiltSwitchReceiver receiverTilt) {
+		return new MessageListenerAdapter(receiverTilt, "receiveMessage");
 	}
 	
     public static void main(String[] args) {

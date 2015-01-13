@@ -17,18 +17,19 @@ public class TiltSwitchEvent {
 
 	@Id
 	@Column(name="TILT_SWITCH_EVENT_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	private Boolean open;
 	@ManyToOne
 	@JoinColumn(name = "TILT_SWITCH_ID")
 	private TiltSwitch tiltSwitch;
+	@Column(name="EVENTTIME")
 	private Date eventTime;
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public TiltSwitch getTiltSwitch() {

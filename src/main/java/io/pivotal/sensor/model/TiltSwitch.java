@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,18 +19,19 @@ public class TiltSwitch {
 
 	@Id
 	@Column(name="TILT_SWITCH_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	@Column(name="TILTSWITCHID")
 	private String tiltSwitchId;
+	@Column(name="CREATEDTIME")
 	private Date createdTime;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "tiltSwitch", orphanRemoval = true)
 	private List<TiltSwitchEvent> tiltSwitchEvents = new ArrayList<TiltSwitchEvent>();
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getTiltSwitchId() {

@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,23 +19,20 @@ public class RFID {
 
 	@Id
 	@Column(name="RFID_ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	@Column(name="RFID")
 	private String rfid;
 	private Date createdTime;
 	private Boolean active;
-	@ManyToOne
-	@JoinColumn(name = "USER_ID")
-	private User user;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "rfid", orphanRemoval = true)
 	private List<RFIDEvent> rfidEvents = new ArrayList<RFIDEvent>();
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -47,14 +42,6 @@ public class RFID {
 
 	public void setRfid(String rfid) {
 		this.rfid = rfid;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Date getCreatedTime() {
