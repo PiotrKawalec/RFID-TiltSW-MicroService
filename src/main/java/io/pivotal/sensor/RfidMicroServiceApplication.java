@@ -39,24 +39,39 @@ public class RfidMicroServiceApplication {
 		return new Queue(queueNameTilt, true);
 	}
 
-	@Bean
-	TopicExchange exchangeRFID() {
-		return new TopicExchange("arduino-rfid-exchange");
-	}
+//	@Bean
+//	TopicExchange exchangeRFID() {
+//		return new TopicExchange("arduino-rfid-exchange", true, false);
+//	}
+//	
+//	@Bean
+//	TopicExchange exchangeTilt() {
+//		return new TopicExchange("arduino-tilt-exchange", true, false);
+//	}
 	
 	@Bean
-	TopicExchange exchangeTilt() {
-		return new TopicExchange("arduino-tilt-exchange");
+	TopicExchange exchangeSensor() {
+		return new TopicExchange("arduino-iot-exchange", true, false);
 	}
+//	
+//	@Bean
+//	Binding bindingRFIDWithRFIDExchange(TopicExchange exchangeSensor, TopicExchange exchangeRFID) {
+//		return BindingBuilder.bind(exchangeSensor).to(exchangeRFID).with("arduino-rfid-exchange");
+//	}
 
 	@Bean
 	Binding bindingRFID(Queue queueRFID, TopicExchange exchangeRFID) {
-		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with(queueNameRFID);
+		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with("arduino-rfid-exchange");
 	}
+//	
+//	@Bean
+//	Binding bindingTiltWithTiltExchange(TopicExchange exchangeSensor, TopicExchange exchangeTilt) {
+//		return BindingBuilder.bind(exchangeSensor).to(exchangeTilt).with("arduino-tilt-exchange");
+//	}
 	
 	@Bean
 	Binding bindingTilt(Queue queueTilt, TopicExchange exchangeTilt) {
-		return BindingBuilder.bind(queueTilt).to(exchangeTilt).with(queueNameTilt);
+		return BindingBuilder.bind(queueTilt).to(exchangeTilt).with("arduino-tilt-exchange");
 	}
 	
 	@Bean
