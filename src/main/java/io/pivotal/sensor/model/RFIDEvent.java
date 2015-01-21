@@ -22,7 +22,10 @@ public class RFIDEvent {
 	@ManyToOne
 	@JoinColumn(name = "RFID_ID")
 	private RFID rfid;
+	@Column(name="EVENTTIME")
 	private Date eventTime;
+	@Column(name="SENSORID")
+	private String sensorId;
 	
 	public Long getId() {
 		return id;
@@ -46,6 +49,14 @@ public class RFIDEvent {
 
 	public void setEventTime(Date eventTime) {
 		this.eventTime = eventTime;
+	}
+
+	public String getSensorId() {
+		return sensorId;
+	}
+
+	public void setSensorId(String sensorId) {
+		this.sensorId = sensorId;
 	}
 	
 }

@@ -23,6 +23,7 @@ public class RFID {
 	private Long id;
 	@Column(name="RFID")
 	private String rfid;
+	@Column(name="CREATEDTIME")
 	private Date createdTime;
 	private Boolean active;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "rfid", orphanRemoval = true)

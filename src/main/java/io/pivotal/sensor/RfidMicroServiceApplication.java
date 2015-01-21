@@ -61,7 +61,7 @@ public class RfidMicroServiceApplication {
 
 	@Bean
 	Binding bindingRFID(Queue queueRFID, TopicExchange exchangeRFID) {
-		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with("arduino-rfid-exchange");
+		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with("arduino-rfid");
 	}
 //	
 //	@Bean
