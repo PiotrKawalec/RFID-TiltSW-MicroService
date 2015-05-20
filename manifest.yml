@@ -1,0 +1,6 @@
+---
+applications:
+- name: rfid-tilt-ms
+  memory: 1G 
+  instances: 1
+  path: ./build/libs/rfid-tilt-0.0.1-SNAPSHOT.jar

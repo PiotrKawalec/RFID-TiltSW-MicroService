@@ -29,6 +29,10 @@ public class RfidMicroServiceApplication {
 	@Autowired
 	RabbitTemplate rabbitTemplate; 
 	
+    public static void main(String[] args) {
+        SpringApplication.run(RfidMicroServiceApplication.class, args);
+    }
+    
 	@Bean
 	Queue queueRFID() {
 		return new Queue(queueNameRFID, true);
@@ -38,36 +42,16 @@ public class RfidMicroServiceApplication {
 	Queue queueTilt() {
 		return new Queue(queueNameTilt, true);
 	}
-
-//	@Bean
-//	TopicExchange exchangeRFID() {
-//		return new TopicExchange("arduino-rfid-exchange", true, false);
-//	}
-//	
-//	@Bean
-//	TopicExchange exchangeTilt() {
-//		return new TopicExchange("arduino-tilt-exchange", true, false);
-//	}
 	
 	@Bean
 	TopicExchange exchangeSensor() {
 		return new TopicExchange("arduino-iot-exchange", true, false);
 	}
-//	
-//	@Bean
-//	Binding bindingRFIDWithRFIDExchange(TopicExchange exchangeSensor, TopicExchange exchangeRFID) {
-//		return BindingBuilder.bind(exchangeSensor).to(exchangeRFID).with("arduino-rfid-exchange");
-//	}
 
 	@Bean
 	Binding bindingRFID(Queue queueRFID, TopicExchange exchangeRFID) {
 		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with("arduino-rfid");
 	}
-//	
-//	@Bean
-//	Binding bindingTiltWithTiltExchange(TopicExchange exchangeSensor, TopicExchange exchangeTilt) {
-//		return BindingBuilder.bind(exchangeSensor).to(exchangeTilt).with("arduino-tilt-exchange");
-//	}
 	
 	@Bean
 	Binding bindingTilt(Queue queueTilt, TopicExchange exchangeTilt) {
@@ -111,8 +95,24 @@ public class RfidMicroServiceApplication {
 	MessageListenerAdapter listenerAdapterTilt(TiltSwitchReceiver receiverTilt) {
 		return new MessageListenerAdapter(receiverTilt, "receiveMessage");
 	}
-	
-    public static void main(String[] args) {
-        SpringApplication.run(RfidMicroServiceApplication.class, args);
-    }
+
+//	@Bean
+//	TopicExchange exchangeRFID() {
+//		return new TopicExchange("arduino-rfid-exchange", true, false);
+//	}
+//	
+//	@Bean
+//	TopicExchange exchangeTilt() {
+//		return new TopicExchange("arduino-tilt-exchange", true, false);
+//	}
+//	
+//	@Bean
+//	Binding bindingRFIDWithRFIDExchange(TopicExchange exchangeSensor, TopicExchange exchangeRFID) {
+//		return BindingBuilder.bind(exchangeSensor).to(exchangeRFID).with("arduino-rfid-exchange");
+//	}
+//	
+//	@Bean
+//	Binding bindingTiltWithTiltExchange(TopicExchange exchangeSensor, TopicExchange exchangeTilt) {
+//		return BindingBuilder.bind(exchangeSensor).to(exchangeTilt).with("arduino-tilt-exchange");
+//	}
 }

@@ -24,9 +24,7 @@ public class RFIDReceiver {
 		String[] readings = msg.split(",");
 		if (readings.length != 2) {
 			// log error
-			System.out
-					.println("Message did not have the corect number of values!!! ["
-							+ msg + "]");
+			System.out.println("Message did not have the corect number of values!!! [" + msg + "]");
 		} else {
 			System.out.println("Received [" + msg + "]");
 			// TODO
