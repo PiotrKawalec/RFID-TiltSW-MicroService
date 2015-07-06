@@ -41,7 +41,7 @@ OPEN boolean not null,
 EVENTTIME timestamp not null
 );
 
-alter table USERS add constraint FK_USER_RFID foreign key (RFID_ID) references USERS(RFID_ID) on delete cascade;
+alter table USERS add constraint FK_USER_RFID foreign key (RFID_ID) references RFID(RFID_ID) on delete cascade;
 alter table RFID_EVENT add constraint FK_RFID_RFID_EVENT foreign key (RFID_ID) references RFID(RFID_ID) on delete cascade;
 alter table TILT_SWITCH_EVENT add constraint FK_TILT_SWITCH_EVENT foreign key (TILT_SWITCH_ID) references TILT_SWITCH(TILT_SWITCH_ID) on delete cascade;
 
