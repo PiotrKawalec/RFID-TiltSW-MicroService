@@ -2,6 +2,7 @@ package io.pivotal.sensor.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,19 +16,23 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
+	@Column(name="USER_ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	private Long id;
+	@Column(name="FIRSTNAME")
 	private String firstname;
+	@Column(name="LASTNAME")
 	private String lastname;
+	@Column(name="CREATEDTIME")
 	private Date createdTime;
 	@OneToOne
 	@JoinColumn(name = "RFID_ID")
 	private RFID rfid;
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getFirstname() {

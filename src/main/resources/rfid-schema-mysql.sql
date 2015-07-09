@@ -7,36 +7,36 @@ drop table if exists USERS;
 
 
 create table USERS (
-USER_ID integer primary key AUTO_INCREMENT,
-RFID_ID integer UNIQUE not null,
+USER_ID BIGINT primary key AUTO_INCREMENT,
+RFID_ID BIGINT UNIQUE not null,
 FIRSTNAME varchar(100) not null,
 LASTNAME varchar(100) not null,
 CREATEDTIME timestamp not null
 );
 
 create table RFID (
-RFID_ID integer primary key AUTO_INCREMENT,
+RFID_ID BIGINT primary key AUTO_INCREMENT,
 RFID varchar(100) not null,
 ACTIVE boolean not null,
 CREATEDTIME timestamp not null
 );
 
 create table RFID_EVENT (
-RFID_EVENT_ID  integer primary key AUTO_INCREMENT,
-RFID_ID integer not null,
+RFID_EVENT_ID  BIGINT primary key AUTO_INCREMENT,
+RFID_ID BIGINT not null,
 SENSORID varchar(100) not null,
 EVENTTIME timestamp not null
 );
 
 create table TILT_SWITCH (
-TILT_SWITCH_ID integer primary key AUTO_INCREMENT,
+TILT_SWITCH_ID BIGINT primary key AUTO_INCREMENT,
 TILTSWITCHID varchar(100) not null,
 CREATEDTIME timestamp not null
 );
 
 create table TILT_SWITCH_EVENT (
-TILT_SWITCH_EVENT_ID integer primary key AUTO_INCREMENT,
-TILT_SWITCH_ID integer not null,
+TILT_SWITCH_EVENT_ID BIGINT primary key AUTO_INCREMENT,
+TILT_SWITCH_ID BIGINT not null,
 OPEN boolean not null,
 EVENTTIME timestamp not null
 );
