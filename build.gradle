@@ -33,7 +33,7 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test") 
 }
 dependencyManagement {
-	imports { 
+	imports { 	
 		mavenBom "org.springframework.cloud:spring-cloud-starter-parent:Angel.SR3" 
 	}
 }
@@ -42,6 +42,11 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile("org.springframework.boot:spring-boot-starter-cloud-connectors")
+	//======================
+	compile("org.springframework.boot:spring-cloud-starter-ribbon")
+	compile("com.netflix.hystrix:hystrix-javanica:1.3.16")
+	compile("com.netflix.hystrix:hystrix-metrics-event-stream:1.3.16")
+	//==================
 	compile("postgresql:postgresql:9.0-801.jdbc4")
 	compile("mysql:mysql-connector-java:5.1.35")
 	compile("org.flywaydb:flyway-core:3.2.1")
