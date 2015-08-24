@@ -5,14 +5,19 @@ import io.pivotal.sensor.model.TiltSwitchEvent;
 import io.pivotal.sensor.service.TiltSwitchSensorService;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 public class TiltSwitchReceiver {
 
 	@Autowired
 	private TiltSwitchSensorService tiltSwitchSensorService;
 
+	@HystrixCommand(fallbackMethod = "tiltDefaultFallback")
 	public void receiveMessage(byte[] message) {
 		// TODO need to work out message here!
 
@@ -43,6 +48,11 @@ public class TiltSwitchReceiver {
 				System.out.println("error no tilt switch found with ID : " + readings[0]);
 			}
 		}
+	}
+	
+	public String tiltDefaultFallback(byte[] message) {
+		System.out.println("Inside TILT-SWITCH, could not connect to DB");
+        return "tilt fallback method";
 	}
 
 }

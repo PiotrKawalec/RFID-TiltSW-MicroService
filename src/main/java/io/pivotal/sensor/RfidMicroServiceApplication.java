@@ -1,7 +1,5 @@
 package io.pivotal.sensor;
 
-import java.util.Map;
-
 import io.pivotal.sensor.messaging.RFIDReceiver;
 import io.pivotal.sensor.messaging.TiltSwitchReceiver;
 
@@ -15,26 +13,14 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
-import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 
 @EnableCircuitBreaker
+@EnableHystrixDashboard
 @SpringBootApplication
 @EnableEurekaClient
 public class RfidMicroServiceApplication{
@@ -44,6 +30,12 @@ public class RfidMicroServiceApplication{
 
 	final static String queueNameRFID = "arduino-rfid-event-queue";
 	final static String queueNameTilt = "arduino-tilt-event-queue";
+	
+	//private String queueNameRFID;
+	//private String queueNameTilt;
+	//private String exchange;
+	//private String rfidRoutingKey;
+	//private String tiltRoutingKey;
 
 	@Autowired
 	RabbitTemplate rabbitTemplate; 
@@ -65,16 +57,19 @@ public class RfidMicroServiceApplication{
 	@Bean
 	TopicExchange exchangeSensor() {
 		return new TopicExchange("arduino-iot-exchange", true, false);
+		//return new TopicExchange(exchange, true, false);
 	}
 
 	@Bean
 	Binding bindingRFID(Queue queueRFID, TopicExchange exchangeRFID) {
 		return BindingBuilder.bind(queueRFID).to(exchangeRFID).with("arduino-rfid");
+		//return BindingBuilder.bind(queueRFID).to(exchangeRFID).with(rfidRoutingKey);
 	}
 	
 	@Bean
 	Binding bindingTilt(Queue queueTilt, TopicExchange exchangeTilt) {
 		return BindingBuilder.bind(queueTilt).to(exchangeTilt).with("arduino-tilt-exchange");
+		//return BindingBuilder.bind(queueTilt).to(exchangeTilt).with(tiltRoutingKey);
 	}
 	
 	@Bean
@@ -134,49 +129,23 @@ public class RfidMicroServiceApplication{
 //	Binding bindingTiltWithTiltExchange(TopicExchange exchangeSensor, TopicExchange exchangeTilt) {
 //		return BindingBuilder.bind(exchangeSensor).to(exchangeTilt).with("arduino-tilt-exchange");
 //	}
+	/*
+	 @Autowired
+	    void setEnvironment(Environment e) { //used to test reading of values
+	    
+		 	//queueNameRFID = e.getProperty("rfid.queueNameRFID");
+			queueNameTilt = e.getProperty("rfid.queueNameTilt");
+			exchange = e.getProperty("rfid.exchangeName");
+			rfidRoutingKey = e.getProperty("rfid.routingKeyRFID");
+			tiltRoutingKey = e.getProperty("rfid.routingKeyTilt");
+		 
+	    	System.out.println(e.getProperty("rfid.queueNameRFID"));
+	    	System.out.println(e.getProperty("rfid.queueNameTilt"));
+	    	System.out.println(e.getProperty("rfid.exchangeName"));
+	    	System.out.println(e.getProperty("rfid.routingKeyRFID"));
+	    	System.out.println(e.getProperty("rfid.routingKeyTilt"));	
+
+	    }
+	*/
+	
 }
-/*
-@Component
-class StoreIntegration {
-
-    @HystrixCommand(fallbackMethod = "defaultStores")
-    public Object getStores(Map<String, Object> parameters) {
-        //do stuff that might fail
-    }
-
-    public Object defaultStores(Map<String, Object> parameters) {
-        return // something useful;
-    }
-}
-*/
-
-/*
-@Configuration
-@EnableConfigurationProperties(HystrixProperties)
-@ConditionalOnExpression("\${hystrix.enabled:true}")
-class HystrixConfiguration {
-    @Autowired
-    HystrixProperties hystrixProperties;
-
-    @Bean
-    @ConditionalOnClass(HystrixCommandAspect)
-    HystrixCommandAspect hystrixCommandAspect() {
-        new HystrixCommandAspect();
-    }
-
-    @Bean
-    @ConditionalOnClass(HystrixMetricsStreamServlet)
-    @ConditionalOnExpression("\${hystrix.streamEnabled:false}")
-    public ServletRegistrationBean hystrixStreamServlet(){
-        new ServletRegistrationBean(new HystrixMetricsStreamServlet(), hystrixProperties.streamUrl);
-    }
-}
-
-
-@ConfigurationProperties(prefix = "hystrix", ignoreUnknownFields = true)
-class HystrixProperties {
-    boolean enabled = true
-    boolean streamEnabled = false
-    String streamUrl = "/hystrix.stream"
-}
-*/

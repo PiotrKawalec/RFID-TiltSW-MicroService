@@ -5,9 +5,13 @@ import io.pivotal.sensor.model.RFIDEvent;
 import io.pivotal.sensor.service.RFIDSensorService;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 public class RFIDReceiver {
 
@@ -16,6 +20,7 @@ public class RFIDReceiver {
 	@Autowired
 	RabbitTemplate rabbitTemplate;
 
+	@HystrixCommand(fallbackMethod = "rfidDefaultFallback")
 	public void receiveMessage(byte[] message) {
 		// TODO need to work out message here!
 
@@ -52,4 +57,8 @@ public class RFIDReceiver {
 		}
 	}
 
+	public String rfidDefaultFallback(byte[] message) {
+		System.out.println("Inside RFID, could not connect to DB");
+        return "rfid fallback method";
+	}
 }

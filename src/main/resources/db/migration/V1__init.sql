@@ -1,13 +1,13 @@
-#drop table if exists tilt_switch_event;
-#drop table if exists tilt_switch;
-#drop table if exists rfid_event;
-#drop table if exists rfid;
-#drop table if exists users;
+drop table if exists tilt_switch_event;
+drop table if exists tilt_switch;
+drop table if exists rfid_event;
+drop table if exists rfid;
+drop table if exists users;
 
-
+create table hibernate_sequence();
 
 create table users (
-USER_ID BIGINT primary key AUTO_INCREMENT,
+USER_ID BIGINT primary key,
 RFID_ID BIGINT UNIQUE not null,
 FIRSTNAME varchar(100) not null,
 LASTNAME varchar(100) not null,
@@ -15,27 +15,27 @@ CREATEDTIME timestamp not null
 );
 
 create table rfid (
-RFID_ID BIGINT primary key AUTO_INCREMENT,
+RFID_ID BIGINT primary key,
 RFID varchar(100) not null,
 ACTIVE boolean not null,
 CREATEDTIME timestamp not null
 );
 
 create table rfid_event (
-RFID_EVENT_ID  BIGINT primary key AUTO_INCREMENT,
+RFID_EVENT_ID  BIGINT primary key,
 RFID_ID BIGINT not null,
 SENSORID varchar(100) not null,
 EVENTTIME timestamp not null
 );
 
 create table tilt_switch (
-TILT_SWITCH_ID BIGINT primary key AUTO_INCREMENT,
+TILT_SWITCH_ID BIGINT primary key,
 TILTSWITCHID varchar(100) not null,
 CREATEDTIME timestamp not null
 );
 
 create table tilt_switch_event (
-TILT_SWITCH_EVENT_ID BIGINT primary key AUTO_INCREMENT,
+TILT_SWITCH_EVENT_ID BIGINT primary key,
 TILT_SWITCH_ID BIGINT not null,
 OPEN boolean not null,
 EVENTTIME timestamp not null
@@ -54,8 +54,5 @@ insert into rfid (RFID_ID, RFID, ACTIVE, CREATEDTIME) values (3, 'cb6e5e74', fal
 insert into users (USER_ID, RFID_ID, FIRSTNAME, LASTNAME, CREATEDTIME) values (1, 1, 'Eugene', 'Bell', TIMESTAMP '2015-01-10 10:00:00');
 insert into users (USER_ID, RFID_ID, FIRSTNAME, LASTNAME, CREATEDTIME) values (2, 2, 'Trevor', 'Kenna', TIMESTAMP '2015-01-11 12:00:00');
 insert into users (USER_ID, RFID_ID, FIRSTNAME, LASTNAME, CREATEDTIME) values (3, 3, 'Stephen', 'Carter', TIMESTAMP '2015-01-11 13:00:00');
-#insert into rfid_event (RFID_EVENT_ID, RFID_ID, EVENTTIME) values (1, 1, TIMESTAMP '2015-01-10 12:31:22');
-#insert into rfid_event (RFID_EVENT_ID, RFID_ID, EVENTTIME) values (2, 1, TIMESTAMP '2015-01-10 12:31:23');
-#insert into rfid_event (RFID_EVENT_ID, RFID_ID, EVENTTIME) values (3, 1, TIMESTAMP '2015-01-10 12:31:24');
-#insert into rfid_event (RFID_EVENT_ID, RFID_ID, EVENTTIME) values (4, 1, TIMESTAMP '2015-01-10 12:31:25');
-#insert into rfid_event (RFID_EVENT_ID, RFID_ID, EVENTTIME) values (5, 1, TIMESTAMP '2015-01-10 12:31:26');
+
+
